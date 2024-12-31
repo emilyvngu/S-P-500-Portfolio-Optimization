@@ -5,9 +5,7 @@ from streamlit_extras.app_logo import add_logo
 import numpy as np
 import random
 import time
-from modules.nav import SideBarLinks
 
-SideBarLinks()
 
 def response_generator():
   response = random.choice (
