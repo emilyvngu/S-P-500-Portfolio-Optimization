@@ -11,7 +11,6 @@ logger = logging.getLogger(__name__)
 # import the main streamlit library as well
 # as SideBarLinks function from src/modules folder
 import streamlit as st
-from modules.nav import SideBarLinks
 
 # streamlit supports reguarl and wide layout (how the controls
 # are organized/displayed on the screen).
