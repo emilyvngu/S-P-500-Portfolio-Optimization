@@ -5,6 +5,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from modules.data_utils import load_sp500_data  # Assuming this loads SPY data
+import os
 
 # Set page title
 st.title("Portfolio Visualization")
