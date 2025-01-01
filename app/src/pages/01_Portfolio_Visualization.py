@@ -1,10 +1,6 @@
 import streamlit as st
 from streamlit_extras.app_logo import add_logo
-import world_bank_data as wb
-import matplotlib.pyplot as plt
-import numpy as np
-
-import pandas as pd
+from assets import sp500_raw_data.csv
 import plotly.express as px
 
 # set the header of the page
@@ -15,10 +11,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import yfinance as yf
 
-ticker = 'SPY'
-spy = yf.download(ticker, start='2019-10-01', end='2024-10-02')
-print("original spy data:__________________")
-print(spy.head(4))
+st.write(sp500_raw_data)
 
 spy['Log Returns'] = np.log(spy['Adj Close'] / spy['Adj Close'].shift(1))
 print("Log Returns spy:____________________")
