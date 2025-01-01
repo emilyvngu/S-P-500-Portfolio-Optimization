@@ -19,7 +19,7 @@ st.header("SPY: Growth of $100 Investment")
 
 st.write("Current Working Directory:", os.getcwd())
 
-csv_file_path = os.path.abspath("src/assets/sp500_raw_data.csv")
+csv_file_path = os.path.abspath("/assets/sp500_raw_data.csv")
 
 try:
     spy = pd.read_csv(csv_file_path, index_col=0, parse_dates=True)
