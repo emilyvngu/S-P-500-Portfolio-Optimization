@@ -1,44 +1,70 @@
 import streamlit as st
-from streamlit_extras.app_logo import add_logo
-import plotly.express as px
-from modules.data_utils import load_raw_data
+import yfinance as yf
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+from modules.data_utils import load_raw_data  # Assuming this loads SPY data
 
-# set the header of the page
-st.header('Portfolio Visualization: Growth of $100')
+# Set page title
+st.title("Portfolio Visualization")
 
+# Set the header for SPY visualization
+st.header("SPY: Growth of $100 Investment")
+
+# Load SPY data
 spy = load_raw_data()
-print(spy.head(4))
 
+# Calculate Log Returns, Cumulative Log Returns, Compounded Returns, and Investment Value
 spy['Log Returns'] = np.log(spy['Adj Close'] / spy['Adj Close'].shift(1))
-print("Log Returns spy:____________________")
-print(spy.head(4))
-
 spy['Cumulative Log Returns'] = spy['Log Returns'].cumsum()
-print("Cumulative Log Returns:_____________________")
-print(spy.head(4))
-
 spy['Compounded Return'] = np.exp(spy['Cumulative Log Returns'])
-print("Compounded Return:_____________________")
-print(spy.head(4))
-
 initial_investment = 100
 spy['Investment Value'] = initial_investment * spy['Compounded Return']
-print("Investment Value:_____________________")
-print(spy.head(4))
 
-# Plot the Investment Value over time
-plt.figure(figsize=(10, 6))
-plt.plot(spy.index, spy['Investment Value'], label='Principal Growth (SPY)')
-plt.title('Principal Growth over Time for SPY')
-plt.xlabel('Time')
-plt.ylabel('Principal Growth')
-plt.legend()
-plt.grid(True)
-plt.show()
+# Plot the Investment Value over time using Plotly
+fig_spy = go.Figure()
+fig_spy.add_trace(go.Scatter(x=spy.index, y=spy['Investment Value'], mode='lines', name='SPY Investment'))
+fig_spy.update_layout(
+    title="Principal Growth over Time for SPY ($100 Investment)",
+    xaxis_title="Time",
+    yaxis_title="Investment Value ($)",
+    template="plotly_white"
+)
+st.plotly_chart(fig_spy)
 
-# NEXT GRAPH (1/N) Equal Weights Portfolio"____________________________________________________________________
+# Set the header for the Equal-Weighted Portfolio visualization
+st.header("Magnificent 7: Equal-Weighted Portfolio")
 
+# Define the tickers for the "Magnificent 7"
+tickers = ['AAPL', 'MSFT', 'AMZN', 'GOOGL', 'META', 'TSLA', 'NVDA']
 
+# Fetch Adjusted Close prices
+data = yf.download(tickers, start='2019-10-01', end='2024-10-01')['Adj Close']
+
+# Calculate Log Returns
+log_returns = np.log(data / data.shift(1))
+
+# Define equal weights for the portfolio
+weights = np.array([1 / len(tickers)] * len(tickers))
+
+# Calculate weighted log returns for the portfolio
+weighted_log_returns = log_returns.dot(weights)
+
+# Calculate cumulative weighted log returns and convert to actual returns
+cumulative_weighted_log_returns = weighted_log_returns.cumsum()
+compounded_returns = np.exp(cumulative_weighted_log_returns)
+
+# Calculate Investment Value
+investment_values = initial_investment * compounded_returns
+
+# Plot the growth of the $100 investment using Plotly
+fig_portfolio = go.Figure()
+fig_portfolio.add_trace(go.Scatter(x=data.index, y=investment_values, mode='lines', name='Equal-Weighted Portfolio'))
+fig_portfolio.update_layout(
+    title="Principal Growth: Magnificent 7 Equal-Weighted Portfolio ($100 Investment)",
+    xaxis_title="Time",
+    yaxis_title="Investment Value ($)",
+    template="plotly_white"
+)
+st.plotly_chart(fig_portfolio)
