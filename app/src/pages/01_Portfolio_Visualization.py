@@ -13,9 +13,6 @@ st.title("Portfolio Visualization")
 st.header("SPY: Growth of $100 Investment")
 
 # Load SPY data
-
-st.write("Current Working Directory:", os.getcwd())
-
 file_path = '/appcode/assets/sp500_raw_data.csv'
 
 try:
@@ -25,9 +22,8 @@ except FileNotFoundError:
     st.error(f"File not found: {file_path}")
     st.stop()
 
-print(spy.columns)
-
 # Calculate Log Returns, Cumulative Log Returns, Compounded Returns, and Investment Value
+spy['Adj Close'] = pd.to_numeric(spy['Adj Close'], errors='coerce')
 spy['Log Returns'] = np.log(spy['Adj Close'] / spy['Adj Close'].shift(1))
 spy['Cumulative Log Returns'] = spy['Log Returns'].cumsum()
 spy['Compounded Return'] = np.exp(spy['Cumulative Log Returns'])
@@ -52,7 +48,9 @@ st.header("Magnificent 7: Equal-Weighted Portfolio")
 tickers = ['AAPL', 'MSFT', 'AMZN', 'GOOGL', 'META', 'TSLA', 'NVDA']
 
 # Fetch Adjusted Close prices
-data = yf.download(tickers, start='2019-10-01', end='2024-10-01')['Adj Close']
+data = yf.download(tickers, start='2020-01-01', end='2023-01-01')
+
+data['Adj Close'] = pd.to_numeric(data['Adj Close'], errors='coerce')
 
 # Calculate Log Returns
 log_returns = np.log(data / data.shift(1))
