@@ -3,11 +3,6 @@
 # sample application for your project
 ##################################################
 
-# Set up basic logging infrastructure
-import logging
-logging.basicConfig(format='%(filename)s:%(lineno)s:%(levelname)s -- %(message)s', level=logging.INFO)
-logger = logging.getLogger(__name__)
-
 # import the main streamlit library as well
 # as SideBarLinks function from src/modules folder
 import streamlit as st
@@ -25,5 +20,6 @@ Welcome to this interactive app showcasing portfolio optimization and backtestin
 Explore the sections below to see visualizations, results, and more!
 """)
 
-
+if st.sidebar.button("Get Random Ticker"):
+    st.write("5")
 
