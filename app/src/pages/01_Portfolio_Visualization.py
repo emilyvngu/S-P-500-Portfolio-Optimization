@@ -5,7 +5,6 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from modules.data_utils import load_sp500_data  # Assuming this loads SPY data
-from assets 
 
 # Set page title
 st.title("Portfolio Visualization")
@@ -15,13 +14,15 @@ st.header("SPY: Growth of $100 Investment")
 
 # Load SPY data
 
-csv_file_path = "src/assets/sp500_raw_data.csv"
+csv_file_path = os.path.abspath("app/src/assets/sp500_raw_data.csv")
+
 try:
     spy = pd.read_csv(csv_file_path, index_col=0, parse_dates=True)
     st.write("Successfully loaded data.")
 except FileNotFoundError:
     st.error(f"File not found: {csv_file_path}")
     st.stop()
+
 
 # Calculate Log Returns, Cumulative Log Returns, Compounded Returns, and Investment Value
 spy['Log Returns'] = np.log(spy['Adj Close'] / spy['Adj Close'].shift(1))
