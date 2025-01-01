@@ -17,7 +17,6 @@ file_path = '/appcode/assets/sp500_raw_data.csv'
 
 try:
     spy = pd.read_csv(file_path, index_col=0, parse_dates=True)
-    st.write("Successfully loaded data.")
 except FileNotFoundError:
     st.error(f"File not found: {file_path}")
     st.stop()
@@ -44,13 +43,18 @@ st.plotly_chart(fig_spy)
 # Set the header for the Equal-Weighted Portfolio visualization
 st.header("Magnificent 7: Equal-Weighted Portfolio")
 
-# Define the tickers for the "Magnificent 7"
+file_path = '/appcode/assets/mag7_adjclose_data.csv'
+
+try:
+    mag7_data = pd.read_csv(file_path, index_col=0, parse_dates=True)
+except FileNotFoundError:
+    st.error(f"File not found: {file_path}")
+    st.stop()
+
 tickers = ['AAPL', 'MSFT', 'AMZN', 'GOOGL', 'META', 'TSLA', 'NVDA']
 
-# Fetch Adjusted Close prices
-data = yf.download(tickers, start='2020-01-01', end='2023-01-01')
-
-data['Adj Close'] = pd.to_numeric(data['Adj Close'], errors='coerce')
+# Convert the values to numeric (if needed)
+data = mag7_data.apply(pd.to_numeric, errors='coerce')
 
 # Calculate Log Returns
 log_returns = np.log(data / data.shift(1))
@@ -70,7 +74,7 @@ investment_values = initial_investment * compounded_returns
 
 # Plot the growth of the $100 investment using Plotly
 fig_portfolio = go.Figure()
-fig_portfolio.add_trace(go.Scatter(x=data.index, y=investment_values, mode='lines', name='Equal-Weighted Portfolio'))
+fig_portfolio.add_trace(go.Scatter(x=data.index, y=investment_values, mode='lines', name='Equal-Weighted Portfolio', line=dict(color='red')))
 fig_portfolio.update_layout(
     title="Principal Growth: Magnificent 7 Equal-Weighted Portfolio ($100 Investment)",
     xaxis_title="Time",
@@ -78,3 +82,27 @@ fig_portfolio.update_layout(
     template="plotly_white"
 )
 st.plotly_chart(fig_portfolio)
+
+fig_combined = go.Figure()
+
+# Add SPY line
+fig_combined.add_trace(
+    go.Scatter(x=spy.index, y=spy['Investment Value'], mode='lines', name='SPY')
+)
+
+# Add Magnificent 7 line
+fig_combined.add_trace(
+    go.Scatter(x=data.index, y=investment_values, mode='lines', name='Magnificent 7 Portfolio')
+)
+
+# Update layout
+fig_combined.update_layout(
+    title="Portfolio Comparison: SPY vs. Magnificent 7 ($100 Investment)",
+    xaxis_title="Time",
+    yaxis_title="Investment Value ($)",
+    template="plotly_white",
+    legend_title="Portfolios"
+)
+
+# Display the combined plot
+st.plotly_chart(fig_combined)
