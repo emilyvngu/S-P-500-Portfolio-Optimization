@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 
-def load_sp500_data(filepath='src/assets/sp500_data.csv'):
+def load_sp500_data(filepath='src/assets/sp500_raw_data.csv'):
     """
     Load S&P 500 data from the CSV file.
     Args:
