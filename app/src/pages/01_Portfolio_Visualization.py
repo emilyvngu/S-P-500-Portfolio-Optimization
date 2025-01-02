@@ -92,7 +92,7 @@ fig_combined.add_trace(
 
 # Add Magnificent 7 line
 fig_combined.add_trace(
-    go.Scatter(x=data.index, y=investment_values, mode='lines', name='Magnificent 7 Portfolio')
+    go.Scatter(x=data.index, y=investment_values, mode='lines', name='Magnificent 7')
 )
 
 # Update layout
