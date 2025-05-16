@@ -1,18 +1,33 @@
-##################################################
-# This is the main/entry-point file for the 
-# sample application for your project
-##################################################
 import streamlit as st
-import yfinance as yf
-import pandas as pd
-import numpy as np
 
-# streamlit supports reguarl and wide layout (how the controls
-# are organized/displayed on the screen).
-st.set_page_config(layout = 'wide')
+# Set up page
+st.set_page_config(page_title="Portfolio Optimization App", page_icon="📊")
 
-# Title and Introduction
-st.title("Portfolio Optimization and Backtesting")
-st.write("""
-This app processes S&P 500 stock data, calculates portfolio metrics, and provides visualizations for portfolio analysis.
+# Hide Streamlit menu/footer (optional)
+st.markdown("""
+    <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+    </style>
+""", unsafe_allow_html=True)
+
+# Page title
+st.title("📊 Portfolio Optimization Dashboard")
+
+# Intro description
+st.markdown("""
+Welcome to a two-part portfolio analytics tool focused on understanding and visualizing investment strategies.
+
+Use the buttons below to explore:
 """)
+
+# Layout with navigation buttons
+col1, col2 = st.columns(2)
+
+with col1:
+    if st.button("📈 Portfolio Visualization"):
+        st.switch_page("pages/01_Portfolio_Visualization.py")
+
+with col2:
+    if st.button("🧮 Backtesting (Julia)"):
+        st.switch_page("pages/03_Backtesting.py")
