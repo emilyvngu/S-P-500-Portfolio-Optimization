@@ -13,7 +13,7 @@ st.title("Portfolio Visualization")
 st.header("SPY: Growth of $100 Investment")
 
 # Load SPY data
-file_path = '/app/src/assets/sp500_raw_data.csv'
+file_path = 'src/assets/sp500_raw_data.csv'
 
 try:
     spy = pd.read_csv(file_path, index_col=0, parse_dates=True)
